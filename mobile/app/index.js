@@ -1,6 +1,6 @@
 import { Text, View } from "react-native";
 
-export default function Page() {
+const Page = () => {
   return (
     <View className = "bg-red-300 h-full flex items-center justify-center">
       <View>
@@ -10,3 +10,5 @@ export default function Page() {
     </View>
   );
 }
+
+export default Page
