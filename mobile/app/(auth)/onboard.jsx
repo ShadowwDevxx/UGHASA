@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   View,
   TextInput,
@@ -11,7 +11,10 @@ import { MaterialIcons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { collection, addDoc } from "firebase/firestore";
+import { updateProfile, getAuth } from "firebase/auth";
 import { app, db } from "../../firebase";
+import { useRouter } from "expo-router";
+import { UserContext } from "../../components/contexts/usercontext";
 
 const Onboard = () => {
   const [imgSrc, setImgSrc] = useState("");
@@ -19,6 +22,9 @@ const Onboard = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [isLoading, setLoading] = useState(false);
+
+  const router = useRouter();
+  const { user } = useContext(UserContext);
 
   const uploadImageToBucket = async uri => {
     try {
@@ -65,18 +71,25 @@ const Onboard = () => {
     try {
       setLoading(true);
 
-      const avatarUrl = await uploadImageToBucket(imgSrc)
+      // const photoURL = await uploadImageToBucket(imgSrc);
 
-      console.log("starting")
-      const userRef = await addDoc(collection(db, "users"), {
-        firstName,
-        lastName,
-        studentId,
-        avatarUrl,
+      console.log("starting");
+
+      await updateProfile(user, {
+        displayName: `${firstName} ${lastName}`,
+        photoURL:
+          "https://wallpapers.com/images/hd/sasuke-uchiha-mangekyou-sharingan-ability-lnebl6urhy7ogo3a.jpg",
       });
 
-      console.log("Hite");
-      console.log("Done user id is, ", userRef.id);
+      // const userRef = await addDoc(collection(db, "users"), {
+      //   firstName,
+      //   lastName,
+      //   studentId,
+      //   avatarUrl,
+      // });
+      // console.log("Hite");
+      // console.log("Done user id is, ", userRef.id);
+      router.push("/home");
     } catch (error) {
       console.log(error);
     } finally {
@@ -162,12 +175,18 @@ const Onboard = () => {
 
         <View className="w-full">
           {isLoading ? (
-            <ActivityIndicator
-              className="p-5"
-              visible={isLoading}
-              size={26}
-              color={"#133B8A"}
-            />
+            <View className="flex flex-row items-center justify-center">
+              <Text className="pl-5 text-black">
+                {" "}
+                Setting up your profile...{" "}
+              </Text>
+              <ActivityIndicator
+                className="p-5"
+                visible={isLoading}
+                size={26}
+                color={"#133B8A"}
+              />
+            </View>
           ) : (
             <TouchableOpacity
               onPress={handleProfileSetup}
@@ -177,11 +196,6 @@ const Onboard = () => {
             </TouchableOpacity>
           )}
         </View>
-        {/* <View className="w-full">
-          <TouchableOpacity className="p-5 rounded-xl flex items-center bg-[#133B8A]">
-            <Text className="text-white font-bold text-">Finish</Text>
-          </TouchableOpacity>
-        </View> */}
       </View>
     </View>
   );

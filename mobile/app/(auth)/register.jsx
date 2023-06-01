@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -10,6 +10,7 @@ import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { Link, useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
 import { app } from "../../firebase";
+import { UserContext } from "../../components/contexts/usercontext";
 
 const Register = () => {
   const [email, setEmail] = useState();
@@ -18,6 +19,9 @@ const Register = () => {
 
   const auth = getAuth(app);
   const router = useRouter();
+
+  const { user, updateUser } = useContext(UserContext);
+
 
   const handleRegister = async () => {
     try {
