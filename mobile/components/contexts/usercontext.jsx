@@ -13,7 +13,6 @@ export const UserProvider = ({ children }) => {
 
   const auth = getAuth(app);
   onAuthStateChanged(auth, user => {
-    console.log("auth state", user);
     setUser(user);
   });
 

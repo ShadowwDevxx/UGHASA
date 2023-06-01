@@ -11,6 +11,8 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { useContext, useEffect, useState } from "react";
 import { app } from "../../firebase";
 import { UserContext } from "../../components/contexts/usercontext";
+import { Toast } from "react-native-toast-message/lib/src/Toast";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const login = () => {
   const [email, setEmail] = useState();
@@ -25,10 +27,22 @@ const login = () => {
     try {
       console.log(email, password);
       setLoading(true);
-      await signInWithEmailAndPassword(auth, email, password);
+      const userCredentials = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      await AsyncStorage.setItem("email", email);
+      await AsyncStorage.setItem("password", password);
+
       router.push("/home");
     } catch (error) {
       console.log(error);
+      Toast.show({
+        type: "error",
+        position: "bottom",
+        text1: `Sorry, user doesn't exist`,
+      });
     } finally {
       setLoading(false);
     }

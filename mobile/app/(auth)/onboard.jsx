@@ -71,24 +71,15 @@ const Onboard = () => {
     try {
       setLoading(true);
 
-      // const photoURL = await uploadImageToBucket(imgSrc);
+      const photoURL = await uploadImageToBucket(imgSrc);
 
       console.log("starting");
 
       await updateProfile(user, {
         displayName: `${firstName} ${lastName}`,
-        photoURL:
-          "https://wallpapers.com/images/hd/sasuke-uchiha-mangekyou-sharingan-ability-lnebl6urhy7ogo3a.jpg",
+        photoURL,
       });
 
-      // const userRef = await addDoc(collection(db, "users"), {
-      //   firstName,
-      //   lastName,
-      //   studentId,
-      //   avatarUrl,
-      // });
-      // console.log("Hite");
-      // console.log("Done user id is, ", userRef.id);
       router.push("/home");
     } catch (error) {
       console.log(error);

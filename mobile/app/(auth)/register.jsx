@@ -6,7 +6,11 @@ import {
   TouchableOpacity,
   ActivityIndicator,
 } from "react-native";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  sendEmailVerification,
+} from "firebase/auth";
 import { Link, useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
 import { app } from "../../firebase";
@@ -22,7 +26,6 @@ const Register = () => {
 
   const { user, updateUser } = useContext(UserContext);
 
-
   const handleRegister = async () => {
     try {
       setLoading(true);
@@ -32,9 +35,16 @@ const Register = () => {
         email,
         password
       );
-      console.log(userCredentials.user);
-      router.push("/onboard");
+
+      sendEmailVerification(auth.currentUser).then(() =>
+        router.push("/verify")
+      );
     } catch (error) {
+      Toast.show({
+        type: "error",
+        position: "bottom",
+        text1: `Something went wrong try again`,
+      });
     } finally {
       setLoading(false);
     }
