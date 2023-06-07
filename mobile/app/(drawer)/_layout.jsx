@@ -1,14 +1,20 @@
-import {
-  DrawerContentScrollView,
-  DrawerItem,
-  DrawerItemList,
-} from "@react-navigation/drawer";
+import { DrawerContentScrollView } from "@react-navigation/drawer";
 import { Drawer } from "../../src/core/Drawer";
-import { Text, View, TouchableOpacity } from "react-native";
+import { Text, View, TouchableOpacity, Image } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import { useContext } from "react";
+import { UserContext } from "../../src/contexts/usercontext";
+import { useRouter } from "expo-router";
 
 export default function DrawerLayout() {
   const DrawerContent = props => {
+    const { user, signOut } = useContext(UserContext);
+    const router = useRouter();
+
+    const handleSignOut = () => {
+      router.replace("/account/login");
+      signOut();
+    };
     return (
       <View style={{ flex: 1 }}>
         <DrawerContentScrollView
@@ -30,13 +36,16 @@ export default function DrawerLayout() {
                 height: 90,
                 borderRadius: 1000,
               }}
-            ></View>
+            >
+              <Image
+                style={{ width: "100%", height: "100%", borderRadius: 1000 }}
+                source={{ uri: user?.photoURL }}
+              />
+            </View>
             <Text className="text-[#103375] text-xl font-semibold pt-3">
-              John Doe
+              {user?.displayName}
             </Text>
-            <Text className="text-[#103375] text-sm pt-3">
-              john.joe@sts.edu.gh
-            </Text>
+            <Text className="text-[#103375] text-sm pt-3">{user?.email}</Text>
           </View>
           <View
             style={{ padding: 20, borderTopWidth: 1, borderTopColor: "#ccc" }}
@@ -81,10 +90,7 @@ export default function DrawerLayout() {
                 </Text>
               </View>
             </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => {}}
-              style={{ paddingVertical: 20 }}
-            >
+            <TouchableOpacity style={{ paddingVertical: 20 }}>
               <View className="flex flex-row items-center gap-4">
                 <Ionicons
                   name="briefcase-outline"
@@ -162,7 +168,12 @@ export default function DrawerLayout() {
               </Text>
             </View>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => {}} style={{ paddingVertical: 20 }}>
+          <TouchableOpacity
+            onPress={() => {
+              handleSignOut();
+            }}
+            style={{ paddingVertical: 20 }}
+          >
             <View className="flex flex-row items-center gap-4">
               <Ionicons
                 name="exit-outline"

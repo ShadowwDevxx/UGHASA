@@ -1,17 +1,17 @@
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  TextInput,
-  ActivityIndicator,
-} from "react-native";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import { Link, useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
-import { useContext, useEffect, useState } from "react";
-import { app } from "../../../firebase";
-import { Toast } from "react-native-toast-message/lib/src/Toast";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Link, useRouter } from "expo-router";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { useContext, useState } from "react";
+import {
+  ActivityIndicator,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { Toast } from "react-native-toast-message/lib/src/Toast";
+import { app } from "../../../firebase";
 import { UserContext } from "../../../src/contexts/usercontext";
 
 const login = () => {
@@ -35,7 +35,7 @@ const login = () => {
       await AsyncStorage.setItem("email", email);
       await AsyncStorage.setItem("password", password);
 
-      router.push("/navigation/MainContainer");
+      router.push("/Dashboard");
     } catch (error) {
       console.log(error);
       Toast.show({
@@ -110,7 +110,7 @@ const login = () => {
         </View>
         <View className="w-full flex flex-row items-center justify-center">
           <Text>Don't have an account? </Text>
-          <Link href={"/register"}>
+          <Link href={"/account/register"}>
             <Text className="text-[#133B8A] font-semibold">Register</Text>
           </Link>
         </View>
