@@ -1,75 +1,63 @@
-import React, { useContext, useState } from "react";
+import { MaterialIcons } from "@expo/vector-icons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Link, useRouter } from "expo-router";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { useContext, useState } from "react";
 import {
-  View,
+  ActivityIndicator,
   Text,
   TextInput,
   TouchableOpacity,
-  ActivityIndicator,
+  View,
 } from "react-native";
-import {
-  getAuth,
-  createUserWithEmailAndPassword,
-  sendEmailVerification,
-} from "firebase/auth";
-import { Link, useRouter } from "expo-router";
-import { MaterialIcons } from "@expo/vector-icons";
-import { app } from "../../firebase";
-import { UserContext } from "../../components/contexts/usercontext";
 import { Toast } from "react-native-toast-message/lib/src/Toast";
+import { app } from "../../../firebase";
+import { UserContext } from "../../../src/contexts/usercontext";
 
-const Register = () => {
+const login = () => {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
-  const [confirmPassword, setConfirmPassword] = useState();
-  const [isLoading, setLoading] = useState(0);
+  const [isLoading, setLoading] = useState();
 
   const auth = getAuth(app);
   const router = useRouter();
-
   const { user, updateUser } = useContext(UserContext);
 
-  const handleRegister = async () => {
-    if (password !== confirmPassword) {
-      Toast.show({
-        type: "error",
-        position: "bottom",
-        text1: `Passwords do not match`,
-      });
-      return;
-    }
-    
+  const handleLogin = async () => {
     try {
-        setLoading(true);
-        const userCredentials = await createUserWithEmailAndPassword(
-          auth,
-          email,
-          password
+      console.log(email, password);
+      setLoading(true);
+      const userCredentials = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
       );
+      await AsyncStorage.setItem("email", email);
+      await AsyncStorage.setItem("password", password);
 
-      sendEmailVerification(auth.currentUser).then(() =>
-        router.push("/verify")
-      );
+      router.push("/Dashboard");
     } catch (error) {
+      console.log(error);
       Toast.show({
         type: "error",
         position: "bottom",
-        text1: `Something went wrong try again`,
-      });} 
-      finally {
+        text1: `Sorry, user doesn't exist`,
+      });
+    } finally {
       setLoading(false);
     }
   };
 
   return (
     <View className="w-full h-full flex flex-col items-center justify-center bg-white">
-      <View className="w-full flex-col px-4 space-y-4">
+      <View className="w-full flex-col px-4 space-y-5">
         <View className="space-y-2">
-          <Text className="text-3xl font-bold">Register An Account 🚀</Text>
+          <Text className="text-3xl font-bold">Welcome Back 👋</Text>
           <Text className="text-gray-500">
-            You can start using the application after you sign up.
+            You can continue where you left off by loggin in.
           </Text>
         </View>
-        <View className="space-y-4 w-full">
+        <View className="space-y-5 w-full">
           <View className="border-2 p-4 border-gray-300 rounded-lg flex flex-row items-center">
             <MaterialIcons
               style={{
@@ -96,26 +84,13 @@ const Register = () => {
             />
             <TextInput
               className="flex-1"
+              secureTextEntry={true}
               placeholder="Password"
               onChangeText={text => setPassword(text)}
             />
           </View>
-          <View className="border-2 p-4 border-gray-300 rounded-lg flex flex-row items-center">
-            <MaterialIcons
-              style={{
-                paddingRight: 10,
-              }}
-              name="lock-outline"
-              size={24}
-              color="grey"
-            />
-            <TextInput
-              className="flex-1"
-              placeholder="Confirm password"
-              onChangeText={text => setConfirmPassword(text)}
-            />
-          </View>
         </View>
+
         <View className="w-full">
           {isLoading ? (
             <ActivityIndicator
@@ -126,17 +101,17 @@ const Register = () => {
             />
           ) : (
             <TouchableOpacity
-              onPress={handleRegister}
+              onPress={handleLogin}
               className="p-5 rounded-xl flex items-center bg-[#133B8A]"
             >
-              <Text className="text-white font-bold text-">Continue</Text>
+              <Text className="text-white font-bold text-">Login</Text>
             </TouchableOpacity>
           )}
         </View>
         <View className="w-full flex flex-row items-center justify-center">
-          <Text>Have an account? </Text>
-          <Link href={"/login"}>
-            <Text className="text-[#133B8A] font-semibold">Login</Text>
+          <Text>Don't have an account? </Text>
+          <Link href={"/account/register"}>
+            <Text className="text-[#133B8A] font-semibold">Register</Text>
           </Link>
         </View>
       </View>
@@ -144,4 +119,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default login;

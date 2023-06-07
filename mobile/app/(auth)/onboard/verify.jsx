@@ -1,15 +1,11 @@
-import React, { useContext, useState } from "react";
-import {
-  View,
-  StyleSheet,
-  TouchableOpacity,
-  Text,
-  ActivityIndicator,
-} from "react-native";
-import { UserContext } from "../../components/contexts/usercontext";
-import { auth, getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import { app } from "../../firebase";
 import { useRouter } from "expo-router";
+import { getAuth } from "firebase/auth";
+import React, { useContext, useState } from "react";
+import { ActivityIndicator, Text, TouchableOpacity, View } from "react-native";
+import { app } from "../../../firebase";
+import { UserContext } from "../../../src/contexts/usercontext";
+import { Toast } from "react-native-toast-message/lib/src/Toast";
+import Ionicons from "react-native-vector-icons/Ionicons";
 
 const Verify = () => {
   const [isLoading, setLoading] = useState(false);
@@ -33,7 +29,7 @@ const Verify = () => {
       return;
     }
     if (auth.currentUser.emailVerified) {
-      router.push("/onboard");
+      router.push("/onboard/onboard");
     } else {
       Toast.show({
         type: "error",
@@ -46,7 +42,15 @@ const Verify = () => {
   return (
     <View className="w-full h-full flex flex-col items-center justify-center bg-white">
       <View className="w-full flex-col px-4 space-y-5">
-        <View className="space-y-2 w-full">
+        <View className="space-y-2 w-full flex items-center">
+          <View>
+            <Ionicons
+              name="mail"
+              size={50}
+              color="black"
+              style={{ marginLeft: 7, alignItems: "center" }}
+            />
+          </View>
           <Text className="text-3xl font-bold text-center">
             Verify your email address
           </Text>

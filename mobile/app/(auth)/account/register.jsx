@@ -1,63 +1,76 @@
+import React, { useContext, useState } from "react";
 import {
   View,
   Text,
-  TouchableOpacity,
   TextInput,
+  TouchableOpacity,
   ActivityIndicator,
 } from "react-native";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  sendEmailVerification,
+} from "firebase/auth";
 import { Link, useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
-import { useContext, useEffect, useState } from "react";
-import { app } from "../../firebase";
-import { UserContext } from "../../components/contexts/usercontext";
+import { app } from "../../../firebase";
+import { UserContext } from "../../../src/contexts/usercontext";
 import { Toast } from "react-native-toast-message/lib/src/Toast";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const login = () => {
+const Register = () => {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
-  const [isLoading, setLoading] = useState();
+  const [confirmPassword, setConfirmPassword] = useState();
+  const [isLoading, setLoading] = useState(0);
 
   const auth = getAuth(app);
   const router = useRouter();
+
   const { user, updateUser } = useContext(UserContext);
 
-  const handleLogin = async () => {
-    try {
-      console.log(email, password);
-      setLoading(true);
-      const userCredentials = await signInWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-      await AsyncStorage.setItem("email", email);
-      await AsyncStorage.setItem("password", password);
-
-      router.push("/home");
-    } catch (error) {
-      console.log(error);
+  const handleRegister = async () => {
+    if (password !== confirmPassword) {
       Toast.show({
         type: "error",
         position: "bottom",
-        text1: `Sorry, user doesn't exist`,
+        text1: `Passwords do not match`,
       });
-    } finally {
+      return;
+    }
+    
+    try {
+        setLoading(true);
+        const userCredentials = await createUserWithEmailAndPassword(
+          auth,
+          email,
+          password
+      );
+
+      sendEmailVerification(auth.currentUser).then(() =>
+        router.push("/onboard/verify")
+      );
+
+    } catch (error) {
+      Toast.show({
+        type: "error",
+        position: "bottom",
+        text1: `Something went wrong try again`,
+      });} 
+      finally {
       setLoading(false);
     }
   };
 
   return (
     <View className="w-full h-full flex flex-col items-center justify-center bg-white">
-      <View className="w-full flex-col px-4 space-y-5">
+      <View className="w-full flex-col px-4 space-y-4">
         <View className="space-y-2">
-          <Text className="text-3xl font-bold">Welcome Back 👋</Text>
+          <Text className="text-3xl font-bold">Register An Account 🚀</Text>
           <Text className="text-gray-500">
-            You can continue where you left off by loggin in.
+            You can start using the application after you sign up.
           </Text>
         </View>
-        <View className="space-y-5 w-full">
+        <View className="space-y-4 w-full">
           <View className="border-2 p-4 border-gray-300 rounded-lg flex flex-row items-center">
             <MaterialIcons
               style={{
@@ -84,13 +97,26 @@ const login = () => {
             />
             <TextInput
               className="flex-1"
-              secureTextEntry={true}
               placeholder="Password"
               onChangeText={text => setPassword(text)}
             />
           </View>
+          <View className="border-2 p-4 border-gray-300 rounded-lg flex flex-row items-center">
+            <MaterialIcons
+              style={{
+                paddingRight: 10,
+              }}
+              name="lock-outline"
+              size={24}
+              color="grey"
+            />
+            <TextInput
+              className="flex-1"
+              placeholder="Confirm password"
+              onChangeText={text => setConfirmPassword(text)}
+            />
+          </View>
         </View>
-
         <View className="w-full">
           {isLoading ? (
             <ActivityIndicator
@@ -101,17 +127,17 @@ const login = () => {
             />
           ) : (
             <TouchableOpacity
-              onPress={handleLogin}
+              onPress={handleRegister}
               className="p-5 rounded-xl flex items-center bg-[#133B8A]"
             >
-              <Text className="text-white font-bold text-">Login</Text>
+              <Text className="text-white font-bold text-">Continue</Text>
             </TouchableOpacity>
           )}
         </View>
         <View className="w-full flex flex-row items-center justify-center">
-          <Text>Don't have an account? </Text>
-          <Link href={"/register"}>
-            <Text className="text-[#133B8A] font-semibold">Register</Text>
+          <Text>Have an account? </Text>
+          <Link href={"/account/login"}>
+            <Text className="text-[#133B8A] font-semibold">Login</Text>
           </Link>
         </View>
       </View>
@@ -119,4 +145,4 @@ const login = () => {
   );
 };
 
-export default login;
+export default Register;

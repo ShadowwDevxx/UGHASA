@@ -1,20 +1,19 @@
-import React, { useContext, useState } from "react";
-import {
-  View,
-  TextInput,
-  TouchableOpacity,
-  Text,
-  Image,
-  ActivityIndicator,
-} from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { collection, addDoc } from "firebase/firestore";
-import { updateProfile, getAuth } from "firebase/auth";
-import { app, db } from "../../firebase";
 import { useRouter } from "expo-router";
-import { UserContext } from "../../components/contexts/usercontext";
+import { updateProfile } from "firebase/auth";
+import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
+import React, { useContext, useState } from "react";
+import {
+  ActivityIndicator,
+  Image,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { app } from "../../../firebase";
+import { UserContext } from "../../../src/contexts/usercontext";
 
 const Onboard = () => {
   const [imgSrc, setImgSrc] = useState("");
@@ -80,7 +79,7 @@ const Onboard = () => {
         photoURL,
       });
 
-      router.push("/home");
+      router.push("/Dashboard");
     } catch (error) {
       console.log(error);
     } finally {
