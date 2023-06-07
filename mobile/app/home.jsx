@@ -1,17 +1,17 @@
-import { Link, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 import React, { useContext, useEffect } from "react";
-import { View, Text, Image, TouchableOpacity } from "react-native";
 import { UserContext } from "../components/contexts/usercontext";
 import { getAuth } from "firebase/auth";
 import { Toast } from "react-native-toast-message/lib/src/Toast";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { app } from "../firebase";
+import DrawerNavigator from "./navigation/tab-navigator";
 
 const Home = () => {
   const { user } = useContext(UserContext);
   const auth = getAuth(app);
   const router = useRouter();
-
+      
   useEffect(
     () =>
       Toast.show({
@@ -40,19 +40,7 @@ const Home = () => {
     }
   };
   return user ? (
-    <View className="h-full w-full flex items-center justify-center">
-      <Text>Home screen</Text>
-      <Text> Welcome , {user.email}</Text>
-      <Text> username, {user.displayName}</Text>
-      <Text> email verified?, {user.emailVerified}</Text>
-      <View>
-        <Image className="w-16 h-16" source={{ uri: user.photoURL }} />
-      </View>
-      <Link href={"/login"}>Go to login</Link>
-      <TouchableOpacity onPress={handleSignOut}>
-        <Text>Sign out</Text>
-      </TouchableOpacity>
-    </View>
+        <DrawerNavigator />
   ) : null;
 };
 
