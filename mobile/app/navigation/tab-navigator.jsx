@@ -1,22 +1,43 @@
 import * as React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { HeaderButtons } from "react-navigation-header-buttons";
+import { createDrawerNavigator } from "@react-navigation/drawer";
 import Ionicons from "react-native-vector-icons/Ionicons";
-
+import Sidebar from "../components/custom-sidebar/custom-sidebar";
 
 // Screens
-import Dashboard from "./screens/Dashboard";
-import MemberScreen from "./screens/MemberScreen";
-import Notifications from "./screens/Notifications";
-import Discussions from "./screens/Discussions";
+import Dashboard from "./screens/dashboard-screen";
+import MemberScreen from "./screens/member-screen";
+import Notifications from "./screens/notifications-screen";
+import Discussions from "./screens/discussion-screen";
 
 // constants
 import { routes } from "../constants/routes";
 
 const Tab = createBottomTabNavigator();
+const Drawer = createDrawerNavigator();
 
 
-const MainContainer = ({ navigation }) => {
+const DrawerNavigator = () => {
+  return (
+    <Drawer.Navigator
+      screenOptions={{
+        drawerStyle: {
+          width: 330,
+        },
+        headerStyle: {
+          backgroundColor: '#133B8A',
+        },
+        headerTintColor: 'white',
+      }}
+      drawerContent={Sidebar}
+    >
+      <Drawer.Screen  name="Home" component={TabNavigator} />
+    </Drawer.Navigator>
+  );
+};
+
+
+const TabNavigator = () => {
 
   return (
     <>
@@ -41,29 +62,12 @@ const MainContainer = ({ navigation }) => {
       >
         {routes.map(({ name }) => (
           <Tab.Screen
-            options={({ navigation }) => ({
-              headerStyle: {
-                backgroundColor: "#133B8A",
-              },
-              headerTitleStyle: {
-                fontWeight: 'light',
-              },
-              headerTintColor: "#fff",
-              headerLeft: () => (
-                <HeaderButtons>
-                  {/* Bind it to this icon */}
-                 <Ionicons
-                    name="menu"
-                    size={30}
-                    color="#ffff"
-                    style={{ marginLeft: 7, alignItems:"center" }}
-                  />
-                </HeaderButtons>
-              ),
-            })}
-            key={name}
-            name={name}
-            component={getScreenComponent(name)}
+              options={() => ({
+                headerShown: false
+              })}
+              key={name}
+              name={name}
+              component={getScreenComponent(name)}
           />
         ))}
       </Tab.Navigator>
@@ -86,4 +90,4 @@ const getScreenComponent = (name) => {
   }
 };
 
-export default MainContainer;
+export default DrawerNavigator;

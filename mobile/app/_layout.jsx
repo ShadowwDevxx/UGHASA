@@ -9,8 +9,7 @@ export default function () {
       <UserProvider>
         <Stack
           screenOptions={{
-            headerLeft: () => <></>,
-            headerTitle: "",
+            headerShown: false,
             headerShadowVisible: false,
             animationDuration: 5,
             animation: "slide_from_right",

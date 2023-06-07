@@ -28,7 +28,7 @@ export default function Index() {
   }, []);
 
   if (isLoading) {
-    return <Text>Loading....</Text>;
+    return <Text className="text-center">Loading....</Text>;
   }
 
   if (auth.currentUser) {
