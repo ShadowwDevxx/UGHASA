@@ -22,6 +22,7 @@ const useProtectedRoutes = user => {
     } else if (user && user.displayName && inAuthGroup) {
       router.replace("/Dashboard");
     }
+
   }, [user, segments]);
 };
 

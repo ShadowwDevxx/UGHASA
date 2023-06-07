@@ -49,7 +49,7 @@ const Register = () => {
       sendEmailVerification(auth.currentUser).then(() =>
         router.push("/onboard/verify")
       );
-      
+
     } catch (error) {
       Toast.show({
         type: "error",
