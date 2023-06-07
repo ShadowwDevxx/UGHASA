@@ -13,8 +13,8 @@ import {
 } from "firebase/auth";
 import { Link, useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
-import { app } from "../../firebase";
-import { UserContext } from "../../components/contexts/usercontext";
+import { app } from "../../../firebase";
+import { UserContext } from "../../../src/contexts/usercontext";
 
 const Register = () => {
   const [email, setEmail] = useState();

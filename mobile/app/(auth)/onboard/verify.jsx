@@ -6,10 +6,10 @@ import {
   Text,
   ActivityIndicator,
 } from "react-native";
-import { UserContext } from "../../components/contexts/usercontext";
 import { auth, getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import { app } from "../../firebase";
+import { app } from "../../../firebase";
 import { useRouter } from "expo-router";
+import { UserContext } from "../../../src/contexts/usercontext";
 
 const Verify = () => {
   const [isLoading, setLoading] = useState(false);

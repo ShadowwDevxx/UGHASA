@@ -1,23 +1,19 @@
 import React from "react";
-import { Stack } from "expo-router";
-import { UserProvider } from "../components/contexts/usercontext";
+import { UserProvider } from "../src/contexts/usercontext";
 import { Toast } from "react-native-toast-message/lib/src/Toast";
+import { Stack } from "expo-router";
 
-export default function () {
+export default RootLayout = () => {
   return (
     <>
       <UserProvider>
         <Stack
           screenOptions={{
-            headerLeft: () => <></>,
-            headerTitle: "",
-            headerShadowVisible: false,
-            animationDuration: 5,
-            animation: "slide_from_right",
+            headerShown: false,
           }}
         />
       </UserProvider>
       <Toast />
     </>
   );
-}
+};

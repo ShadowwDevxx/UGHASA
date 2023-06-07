@@ -12,9 +12,9 @@ import * as ImagePicker from "expo-image-picker";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { collection, addDoc } from "firebase/firestore";
 import { updateProfile, getAuth } from "firebase/auth";
-import { app, db } from "../../firebase";
+import { app, db } from "../../../firebase";
 import { useRouter } from "expo-router";
-import { UserContext } from "../../components/contexts/usercontext";
+import { UserContext } from "../../../src/contexts/usercontext";
 
 const Onboard = () => {
   const [imgSrc, setImgSrc] = useState("");

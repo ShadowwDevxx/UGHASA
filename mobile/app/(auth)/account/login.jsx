@@ -9,10 +9,10 @@ import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { Link, useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useContext, useEffect, useState } from "react";
-import { app } from "../../firebase";
-import { UserContext } from "../../components/contexts/usercontext";
+import { app } from "../../../firebase";
 import { Toast } from "react-native-toast-message/lib/src/Toast";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { UserContext } from "../../../src/contexts/usercontext";
 
 const login = () => {
   const [email, setEmail] = useState();
@@ -35,7 +35,7 @@ const login = () => {
       await AsyncStorage.setItem("email", email);
       await AsyncStorage.setItem("password", password);
 
-      router.push("/home");
+      router.push("/navigation/MainContainer");
     } catch (error) {
       console.log(error);
       Toast.show({
