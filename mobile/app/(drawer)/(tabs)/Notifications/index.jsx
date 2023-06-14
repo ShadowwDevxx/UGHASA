@@ -11,17 +11,17 @@ const styles = StyleSheet.create({
 });
 
 const Notifications = () => {
-  const router = useRouter()
+  const router = useRouter();
   return (
     <>
-      <View style={styles.container}>
-        <Text onPress={() => router.push("/dashboard")}>
-          Notifications Screen
-        </Text>
+      <View
+        className="px-2 pt-5 w-full h-full bg-white space-y-3"
+        style={styles.container}
+      >
+        
       </View>
     </>
   );
 };
 
 export default Notifications;
-
