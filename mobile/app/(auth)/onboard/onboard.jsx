@@ -12,14 +12,18 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { app } from "../../../firebase";
+import { app, db } from "../../../firebase";
 import { UserContext } from "../../../src/contexts/usercontext";
+// import * as firebase from 'firebase-admin'
+import { Firestore, addDoc, collection } from "firebase/firestore";
 
 const Onboard = () => {
   const [imgSrc, setImgSrc] = useState("");
   const [studentId, setStudentId] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [level, setLevel] = useState("");
   const [isLoading, setLoading] = useState(false);
 
   const router = useRouter();
@@ -79,6 +83,17 @@ const Onboard = () => {
         photoURL,
       });
 
+      const userRef = await addDoc(collection(db, "users"), {
+        photoURL: user.photoURL,
+        displayName: user.displayName,
+        email: user.email,
+        phoneNumber,
+        bio: "",
+        level,
+        studentId,
+        // timestamp: firebase.firestore.FieldValue.serverTimestamp()
+      });
+
       router.push("/Dashboard");
     } catch (error) {
       console.log(error);
@@ -131,6 +146,39 @@ const Onboard = () => {
               onChangeText={text => setStudentId(text)}
             />
           </View>
+
+          <View className="border-2 p-4 border-gray-300 rounded-lg flex flex-row items-center">
+            <MaterialIcons
+              style={{
+                paddingRight: 10,
+              }}
+              name="school"
+              size={24}
+              color="grey"
+            />
+            <TextInput
+              className="flex-1"
+              placeholder="Level"
+              onChangeText={text => setLevel(text)}
+            />
+          </View>
+
+          <View className="border-2 p-4 border-gray-300 rounded-lg flex flex-row items-center">
+            <MaterialIcons
+              style={{
+                paddingRight: 10,
+              }}
+              name="phone"
+              size={24}
+              color="grey"
+            />
+            <TextInput
+              className="flex-1"
+              placeholder="Phone Number"
+              onChangeText={text => setPhoneNumber(text)}
+            />
+          </View>
+
           <View className="border-2 p-4 border-gray-300 rounded-lg flex flex-row items-center">
             <MaterialIcons
               style={{

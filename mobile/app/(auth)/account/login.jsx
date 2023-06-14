@@ -58,7 +58,7 @@ const login = () => {
           </Text>
         </View>
         <View className="space-y-5 w-full">
-          <View className="border-2 p-4 border-gray-300 rounded-lg flex flex-row items-center">
+          <View className="p-4 rounded-lg flex flex-row items-center border-2 border-gray-300">
             <MaterialIcons
               style={{
                 paddingRight: 10,
